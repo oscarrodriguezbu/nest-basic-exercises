@@ -102,7 +102,7 @@ Esta sección terminaremos el POST, PATCH y DELETE de nuestro CRUD inicial, pero
 - El DTO es una clase para indicar que asi va a lucir algo, tiene reglas de validacion automatica, se pueden instancias
 - En Nest se le puede crear decoradores a las propiedades de los DTO para validarlos
 - Se aconseja que los DTO sean readonly
-- El validator pipe actua en conjunto con paquetes de tercero para exponer mas decoradores como el class validator y class transformer
+- El validator pipe actua en conjunto con paquetes de tercero para exponer mas decoradores como el `class validator y class transformer`
 - En los params, a nivel global del controlador, en los dtos etc se pueden colocar los pipes
 - El pipe validar global se coloca en lo mas alto para que este pendiente de todas las peticiones y tambien se le puede agregar 
     ciertas configuraciones segun lo que se requiera
@@ -130,29 +130,104 @@ Puntualmente:
 - Comando `nest g resource nombreDelRecurso --no-spec` y luego seleccionar cositas 
 - La entity es como una interfaz, pero es como una representacion de una tabla o schema en node
 - El nombre que se coloque en las entitis al momento de trabajarlos con algun ORM, las tablas de la bd va a tener el nombre de la entity
-- 
-
--------------------------------------
-## Seccion 6 Generar build de producción básico
-
-### Notas:
-- 
 
 -------------------------------------
 ## Seccion 7 MongoDB Pokedex
+Esta sección enteramente se enfoca en la grabación a base de datos, pero puntualmente:
+
+- Validaciones
+- CRUD contra base de datos
+- Docker y Docker Compose
+- Conectar contenedor con filesystem (para mantener la data de la base de datos)
+- Schemas
+- Modelos
+- DTOs y sus extensiones
+- Respaldar a Github
+
+
+### Notas:
+- comando `npm i @nestjs/serve-static` para hacer funcionar el frontend en la carpeta public (ver el nest-cheatsheet.pdf para mas info)
+- En el main   `app.setGlobalPrefix('api/v2');` // esto es para agregar el root de la aplicacion
+- Se hace un custom pipes para eliminar, se desea asegurar que el param sea un id correcto
+- Los pipes tambien retornan data transformada
 
 
 -------------------------------------
 ## Seccion 8 Seed y Paginación
+Esta sección tiene por objetivo aprender:
+
+- Uso de modelos en diferentes módulos
+- SEED para llenar la base de datos
+- Paginación de resultados
+- DTOs para Query parameters
+- Transformaciones de DTOs
+
+También les mostraré varias formas de hacer 
+inserciones por lote y varias formas de lograrlo.
+
 
 ### Notas:
-- 
+- Es bueno usar el CLI para crear los archivos y borrar o modificar lo que no se necesita
+- El controlador solo debe enfocarse en lo que debe hacer y nada mas
+- Comando `git checkout -- .` para volver al commit anterior
+- providers para gestionar los paquetes de terceros para que cuando toque hacer alguna refactorizacion, se haga sin problemas
+- Los providers se crean dentro de la carpeta common
+- los providers deben tener el decorador `@Injectable()` para inyectarlo en un servicio, pero primero deben pasar por el common module
+- En el main colocar:
+```
+transformOptions: {
+    enableImplicitConversion: true, // si en un param se envia "2" se interpreta como 2
+}
+```
+
+### Nota de actualización - Axios
+En la siguiente clase, instalamos el paquete axios para realizar las peticiones HTTP.
+
+En la última versión del mismo, está dando inconvenientes con NestJS (cannot read properties of undefined).
+
+Pueden ver la issue sin resolver a día de hoy: https://github.com/axios/axios/issues/5100.
+
+Por lo que a la hora de instalar axios, recomendamos instalen la versión 0.27.2 hasta que liberen una versión superior con el inconveniente solventado.
+
+Pueden usar el comando `yarn add axios@0.27.2` o `npm install axios@0.27.2`.
 
 -------------------------------------
 ## Seccion 9 Variables de entorno - Deployment y Dockerizar la aplicación
+En esta sección trabajaremos en la configuración de variables de entorno y su validación:
+Puntualmente veremos:
+
+- Dockerizacion
+- Mongo Atlas
+- Env file
+- joi
+- Validation Schemas
+- Configuration Module
+- Recomendaciones para un Readme útil
+- Despliegues
+- Dockerfile
+
 
 ### Notas:
-- 
+- Variables de entorno: .env files Crear en el root del proyecto el archivo .env `npm i @nestjs/config`
+- Todo lo que salga de los env sale como strings
+- Manipular la data de los env en una funcion exportada de `src\config\env.config.ts`
+- Muchas veces no es necesario, pero puede ser necesario un servicio de configuracion para validar los env
+
+
+### Dockerizar la aplicación:
+1. Configurar `Dockerfile`
+2. Configurar `.dockerignore`
+3. Configurar `docker-compose.prod.yaml`
+4. Crear el archivo ```.env.prod```
+5. Llenar las variables de entorno de prod
+6. Crear la nueva imagen por primera vez:
+```
+docker-compose -f docker-compose.prod.yaml --env-file .env.prod up --build
+```
+7. Correr la imagen despues de la segunda vez:
+```
+docker-compose -f docker-compose.prod.yaml --env-file .env.prod up -d
+```
 
 -------------------------------------
 ## seccion 10 TypeORM - Postgres
