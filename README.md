@@ -231,45 +231,153 @@ docker-compose -f docker-compose.prod.yaml --env-file .env.prod up -d
 
 -------------------------------------
 ## seccion 10 TypeORM - Postgres
+En esta sección estaremos trabajando con:
+
+- TypeORM
+- Postgres
+- CRUD
+- Constrains
+- Validaciones
+- Búsquedas
+- Paginaciones
+- DTOs
+- Entities
+- Decoradores de TypeORM para entidades
+- Métodos BeforeInsert, BeforeUpdate
+
+Es una sección importante porque a partir de aquí, empezaremos a construir sobre ella relaciones, autenticación, autorización y websockets.
+
 
 ### Notas:
-- 
+- Desisntalar cosas de prettier para que no moleste: `yarn remove prettier eslint-config-prettier eslint-plugin-prettier`
+- Se usa TypeORM para conectar nest con la bd
+- BeforeInsert y BeforeUpdate en la entidad para hacer algo antes de, puede validar cosas, llenar un campo por defecto, etc
+- Al parecer TypeORM nos protege de inyecciones sql
 
 -------------------------------------
 ## Seccion 11 Relaciones en TypeORM
+Esta sección está cargada de contenido nuevo que les puede servir mucho, especialmente si trabajan con bases de datos relacionales.
+
+- Temas que veremos:
+- Relaciones
+    - De uno a muchos
+    - Muchos a uno
+- Query Runner
+- Query Builder
+- Transacciones
+- Commits y Rollbacks
+- Renombrar tablas
+- Creación de un SEED
+- Aplanar resultados
+
+La idea es hacer que nuestro endpoint de creación y actualización de producto permita la actualización de una tabla secundaria de la misma forma como lo hemos creado en la sección pasada.
+
 
 ### Notas:
-- 
+- Para acutalizar queryRunner Sirve para asegurar el guardado correcto de la data, si algo sale mal, entonces tambien afeta a las relaciones en este caso a las imagenes de los productos
+- El texto plano se refiera a la data que se envia y que sé que va a retornar, entonces en lugar de hacer la consulta se reutiliza la data que se envia
+- para eliminar un producto y como tiene relacion con imagenes, entonces se debe configurar que se elimine en cascada en la entidad
 
 -------------------------------------
 ## Seccion 12 Carga de archivos
+Esta sección es bien interesante porque trabajaremos con la carga de archivos a nuestro backend. 
+Idealmente recuerden, que no es recomendado colocar archivos físicamente en nuestro backend, 
+lo que se recomienda es subirlos y colocarlos en un hosting o servicio diferente.
+
+Pero el conocimiento de tomar y ubicar el archivo en otro lugar de nuestro file system es bastante útil.
+
+Aquí veremos validaciones y control de carga de cualquier archivo hacia nuestro backend.
+
 
 ### Notas:
-- 
+- No se recomienda alojar archivos en el mismo lugar de todo el backend, pero para efectos demostrativos se hace en este proyecto
+- Los nombres de los archivos es mejor guardarlos sin la url inicial, queda mucha data repetida en la bd, es mejor concatenar la url en el backend
 
 -------------------------------------
 ## Seccion 13 Autenticación de autorización
+Esta es una de las secciones más grandes del curso y está cargada de muchos conceptos nuevos, 
+mi recomendación es que traten de digerirla en dos jornadas de estudio en lugar de intentar 
+verla completamente en una sola corrida.
+
+Puntualmente veremos:
+
+- Autenticación
+- Autorización
+- Json Web Tokens
+- Hash de contraseñas
+- Nest Passport
+- Módulos asíncronos
+- Protección de rutas
+- Custom Method Decorators
+- Custom Class Decorators
+- Custom Property Decorators
+- Enlazar usuarios con productos
+- Bearer Tokens
+
+Y mucho más
+
+Hay varias tareas dentro de esta sección que esperaría que intenten llevar con calma, 
+todo lo que esta sección contiene puede ser abrumador.
 
 
 ### Notas:
-- 
+- import * as bcrypt from 'bcrypt'; // forma ligera de hacer el patron adaptador, aunque tambien puede ser aparte
+- Liberias de nest ---> passport para ayudar en la autenticacion
+- jwt se configuran en carpeta strategy, que indica si el token es valido o no
+- Cuando se necesite, los jwt se envian como un header de auth, como un bearer token es una de las formas de hacerlo
+- Guards para permitir o prevenir acceso a una ruta, se usa en el controlador
+- Decorator composition es basarse en un decorador para crear otro decorador, para evitar crear varios decoradores en uno solo
 
 -------------------------------------
 ## Seccion 14 Documentación - OpenAPI
+El objetivo de esta sección es trabajar con la documentación semi-automática que nos ofrece Nest para seguir  la especificación de OpenAPI
+
+Puntualmente veremos:
+- Postman documentation
+- Nest Swagger
+
+
+### Notas:
+- Esta seccion consiste en la documentacion del backend en swagger a traves de openapi de nest
+- Postman ofrece algo muy similar al swagger para documentar pero no es tan completo como swagger
+- openapi es agnostico, no depende de un lenguaje, pero nest tiene un instalador especializado y una documentacion especifica
 
 
 -------------------------------------
 ## Seccion 15 Websockets
+Esta sección tiene información sobre la comunicación entre cliente y servidor mediante WebSockets, puntualmente veremos:
 
+- Nest Gateways
+- Conexiones
+- Desconexiones
+- Emitir y escuchar mensajes desde el servidor y cliente
+- Cliente con Vite y TS
+- Autenticar conexión mediante JWTs
+- Usar mismo mecanismos de autenticación previamente creado
+- Desconectar sockets manualmente
+- Prevenir doble conexión de usuarios autenticados.
 
 ### Notas:
-- 
+- cuando el front y el back estan en el mismo servidor, no hay necesidad de configurar el cors
+- El gateway funciona como un controlador en nest para los ws, de resto lo demas es igual a un rest tradicional
+- El cliente y el servidor se comunican sin que el cliente tenga que activar la peticion
+- Se puede crear un CRUD para um ws, los endpoints se llaman de forma diferente, no es usual hacer un CRUD con ws
+- Se trabaja en un frontend separado para visualizar los ws
+- Para conectar el front con el ws solo se necesita la url del ws en el front, como si fuera un listener
 
 -------------------------------------
 ## Seccion 16 Desplegar toda la aplicación a producción
+Esta sección trabajaremos en desplegar todo el backend y frontend, pero puntualmente aprenderemos:
 
+- Heroku CLI
+- Logs y Tails de logs
+- Manejo de errores en producción
+- Configuración de variables de entorno
+- Postgres en la nube
+- Despliegue en Netlify
+- Pruebas de aplicación
+- CORS
+- Generar build de producción VITE
 
-### Notas:
-- 
 
 -------------------------------------
